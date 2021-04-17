@@ -9,7 +9,7 @@ class ScoreCounter(FrameObject):
 		self.showscore = 0
 		self.score = 0
 		self.diff = diff
-		self.width = self.settings.width
+		self.width = self.settings.width if not self.settings.settings['Cool mode'] else self.settings.width - 825*self.settings.scale
 		self.height = self.settings.height
 		self.gap = int(gap * self.settings.scale * 0.75)
 
@@ -34,6 +34,10 @@ class ScoreCounter(FrameObject):
 	def draw_score(self, score_string, background):
 		x = self.width - (-self.gap + self.frames[0].size[0]) * len(score_string)
 		y = self.frames[0].size[1] // 2
+
+		if self.settings.settings['Cool mode']:
+			y = 52 * self.settings.scale
+
 		for digit in score_string:
 			self.frame_index = int(digit)
 			super().add_to_frame(background, x, y)
@@ -44,7 +48,7 @@ class ScoreCounter(FrameObject):
 			return
 
 		score_string = str(int(self.showscore))
-		score_string = "0" * (8 - len(score_string)) + score_string
+		score_string = ("0" * (8 - len(score_string)) + score_string) if not self.settings.settings['Cool mode'] else score_string
 		if self.settings.settings["In-game interface"] or inbreak:
 			self.draw_score(score_string, background)
 

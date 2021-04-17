@@ -23,7 +23,11 @@ class Accuracy(FrameObject):
 		self.gap = gap * 0.5 * self.settings.scale
 		self.sizegap = self.gap - self.frames[0].size[0]
 		self.y = frames[1] * 0.625 + self.frames[0].size[1] * 0.625 * 0.5 + 3 * self.settings.scale + self.frames[0].size[1]//2
-		self.startx = 1342 * self.settings.scale
+		self.startx = (1342 * self.settings.scale) if not self.settings.settings['Cool mode'] else (920 * self.settings.scale)
+
+		#
+		if self.settings.settings['Cool mode']:
+			self.y = (52 * self.settings.scale) - self.h() / 2
 
 	def update_acc(self, hitresult):
 		self.maxscore += 300

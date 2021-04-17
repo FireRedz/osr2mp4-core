@@ -65,9 +65,27 @@ class Scorebar(AScorebar):
 			self.hp = self.healthprocessor.health_value
 
 		img = self.frames[int(self.frame_index)]
-		img = img.crop((0, 0, int(img.size[0] * self.hp), img.size[1]))
+		orig_size = img.size
+		crop_center = self.settings.settings['Cool mode']
 
-		if self.settings.settings["In-game interface"] or in_break:
+		if crop_center:
+			w, h = img.size
+
+			img = img.crop((
+				(w - (w*self.hp)) / 2,
+				0,
+				(w + (w*self.hp)) / 2,
+				h
+				))
+
+		else: # from left
+			img = img.crop((0, 0, int(img.size[0] * self.hp), img.size[1]))
+
+		
+		if self.settings.settings["In-game interface"] and self.settings.settings['Cool mode'] or in_break:
+			imageproc.add(img, background, (self.settings.width-img.size[0])/2, self.y-self.h, alpha=self.alpha, topleft=True)
+
+		elif self.settings.settings["In-game interface"] or in_break:
 			imageproc.add(img, background, self.x, self.y-self.h, alpha=self.alpha, topleft=True)
 
 		if self.hasmarker:

@@ -15,7 +15,9 @@ def prepare_scorebar(scale, settings):
 	img = yimg.frames
 
 	defaultpath = yimg.imgfrom == ImageFrom.DEFAULT_X or yimg.imgfrom == ImageFrom.DEFAULT_X2
-	yimgmarker = YImage(scorebarmarker, settings, scale, defaultpath=defaultpath, fallback="reeee")
+
+	yimgmarker = YImage(scorebarmarker, settings, scale, defaultpath=defaultpath, fallback="reeee")		
+
 	marker = yimgmarker.img
 	hasmarker = yimgmarker.imgfrom != ImageFrom.BLANK
 	return img, marker, hasmarker

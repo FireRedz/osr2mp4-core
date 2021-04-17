@@ -32,6 +32,9 @@ class TimePie:
 		endangle = -360
 		axes = (self.radius, self.radius)
 
+		if self.settings.settings['Cool mode']:
+			return
+
 		if self.settings.settings["In-game interface"] or inbreak:
 			cv2.ellipse(np_img, (self.x, self.y), axes, angle, startangle, endangle, color, -1, cv2.LINE_AA)
 			cv2.circle(np_img, (self.x, self.y), self.radius, (255, 255, 255, 255), thickness=1, lineType=cv2.LINE_AA)

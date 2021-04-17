@@ -7,13 +7,13 @@ from osr2mp4 import logger
 from osr2mp4.ImageProcess import imageproc
 
 
-def prepare_background(backgroundname, settings):
+def prepare_background(background_path: str, settings: object):
 	"""
-	:param backgroundname: string
+	:param background_path: string
 	:return: PIL.Image
 	"""
 	try:
-		img = Image.open(backgroundname).convert("RGBA")
+		img = Image.open(background_path).convert("RGBA")
 	except Exception as e:
 		logger.error(repr(e))
 		img = Image.open(os.path.join(settings.path, "res/bg.png")).convert("RGBA")

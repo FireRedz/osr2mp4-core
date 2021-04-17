@@ -137,6 +137,7 @@ class Drawer:
 		self.component.cursormiddle.add_to_frame(self.img, cursor_x, cursor_y)
 		self.component.sections.add_to_frame(self.img)
 		self.component.scoreboard.add_to_frame(self.np_img, self.img, in_break)
+		self.component.profile_picture.add_to_frame(self.img)
 		self.component.strain_graph.add_to_frame(self.img, self.frame_info.cur_time)
 		self.component.ppcounter.add_to_frame(self.img)
 		self.component.hitresultcounter.add_to_frame(self.img)

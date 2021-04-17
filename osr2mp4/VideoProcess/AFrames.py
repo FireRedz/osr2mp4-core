@@ -80,6 +80,10 @@ from osr2mp4.ImageProcess.PrepareFrames.Scores.Scoreentry import prepare_scorebo
 from osr2mp4.ImageProcess.PrepareFrames.Scores.SpinBonusScore import prepare_spinbonus
 from osr2mp4.ImageProcess.PrepareFrames.Scores.URBar import prepare_bar
 
+# FireRedz's
+from osr2mp4.ImageProcess.PrepareFrames.Components.ProfilePicture import ProfilePicture
+
+
 
 class PreparedFrames:
 	def __init__(self, settings, diff, mod_combination, ur=None, bg=None, loadranking=True):
@@ -118,7 +122,7 @@ class PreparedFrames:
 		self.combocounter = prepare_combo(self.scorenumbers, settings)
 		self.hitresult = prepare_hitresults(settings.scale, diff, settings)
 		self.spinbonus = prepare_spinbonus(self.scorenumbers)
-		self.scorecounter = prepare_scorecounter(self.scorenumbers)
+		self.scorecounter = prepare_scorecounter(self.scorenumbers, settings)
 
 		self.playinggrade = prepare_playinggrade(settings.scale * 0.75, settings)
 
@@ -146,6 +150,8 @@ class PreparedFrames:
 		self.scoreboardeffect = prepare_scoreboardeffect(settings.scale)
 
 		self.modicons = prepare_modicons(settings.scale, settings)
+		self.profile_picture = ProfilePicture(12164982, settings)
+
 		if loadranking:
 			self.rankingpanel = prepare_rankingpanel(settings.scale, self.bg, settings)
 			self.rankinghitresults = prepare_rankinghitresults(settings.scale, settings)
@@ -231,3 +237,5 @@ class FrameObjects:
 		self.hitresultcounter = HitresultCounter(settings)
 		self.flashlight = Flashlight(frames.flashlight, settings, hasfl)
 		self.strain_graph = StrainGraph(settings, map_time[0], map_time[1])
+		self.profile_picture = frames.profile_picture
+
