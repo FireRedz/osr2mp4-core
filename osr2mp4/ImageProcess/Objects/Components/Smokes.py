@@ -25,14 +25,11 @@ class Smoke:
 		for time, pos in self.states.items():
 			if time > replay_info[3]-9000: # not sure what the actual duration is, should be around ~8-10s
 				
-				""" ignore this, its for the smoke fadeout but currently its fucked so...
-				if (time-(replay_info[3]-9500)) >= 8000:
-					far_into = int(((9500-(time-(replay_info[3]-9500)))/1000)*40) # holy fuck
-					frame = self.frames[far_into-1 if far_into < len(self.frames)-1 else len(self.frames)-1]
-					
+				if (replay_info[3]-time) >= 8000:
+					far_into = int((((replay_info[3]-time) % 8000)/1000)*len(self.frames)-1) # peak programming
+					frame = self.frames[far_into]
 				else:
 					frame = self.frames[0]
-				"""
 
 				smoke_size = frame.size
 
