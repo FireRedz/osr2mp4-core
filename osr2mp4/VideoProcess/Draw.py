@@ -132,6 +132,7 @@ class Drawer:
 		self.component.scorecounter.add_to_frame(self.img, self.cursor_event.event[Replays.TIMES], in_break)
 		self.component.accuracy.add_to_frame(self.img, in_break)
 		self.component.urbar.add_to_frame(self.img)
+		self.component.cursor_smoke.add_to_frame(self.img, self.replay_info.play_data[self.frame_info.osr_index])
 		self.component.cursor_trail.add_to_frame(self.img, cursor_x, cursor_y, self.frame_info.cur_time)
 		self.component.cursor.add_to_frame(self.img, cursor_x, cursor_y)
 		self.component.cursormiddle.add_to_frame(self.img, cursor_x, cursor_y)

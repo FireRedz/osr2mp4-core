@@ -46,6 +46,8 @@ from osr2mp4.ImageProcess.Objects.Components.Button import InputOverlay, InputOv
 from osr2mp4.ImageProcess.Objects.Components.Cursor import Cursor, Cursortrail
 from osr2mp4.ImageProcess.Objects.Scores.SpinBonusScore import SpinBonusScore
 from osr2mp4.ImageProcess.Objects.Scores.URBar import URBar
+from osr2mp4.ImageProcess.Objects.Components.Smokes import Smoke
+
 from osr2mp4.ImageProcess.PrepareFrames.Components.ArrowWarning import prepare_arrowwarning
 from osr2mp4.ImageProcess.PrepareFrames.Components.Button import prepare_scoreentry, prepare_inputoverlaybg, \
 	prepare_inputoverlay
@@ -79,6 +81,7 @@ from osr2mp4.ImageProcess.PrepareFrames.Scores.ScoreCounter import prepare_score
 from osr2mp4.ImageProcess.PrepareFrames.Scores.Scoreentry import prepare_scoreboardscore
 from osr2mp4.ImageProcess.PrepareFrames.Scores.SpinBonusScore import prepare_spinbonus
 from osr2mp4.ImageProcess.PrepareFrames.Scores.URBar import prepare_bar
+
 
 
 class PreparedFrames:
@@ -231,3 +234,4 @@ class FrameObjects:
 		self.hitresultcounter = HitresultCounter(settings)
 		self.flashlight = Flashlight(frames.flashlight, settings, hasfl)
 		self.strain_graph = StrainGraph(settings, map_time[0], map_time[1])
+		self.cursor_smoke = Smoke(settings)
