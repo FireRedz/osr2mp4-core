@@ -124,11 +124,11 @@ class Replay(object):
 
 
 	def parse_play_data(self, replay_data: bytes):
-		frames = []
 		lzma_len = self.read_int() # aka self.__replay_length
 		lzma_raw = lzma.decompress(self.read_byte(lzma_len)).decode('ascii')[:-1]
 		events = [event_raw.split('|') for event_raw in lzma_raw.split(',')]
 
+		"""
 		self.play_data = [
 						ReplayEvent(
 							int(event[0]),
@@ -138,6 +138,30 @@ class Replay(object):
 							)
 						for event in events
 						]
+		"""
+
+		# yea
+		time = 0
+		for event in events:
+			time += int(event[0])
+
+			args = {
+			'delta_time': int(event[0]),
+			'x':float(event[1]),
+			'y': float(event[2]),
+			'keys_pressed': int(event[3]),
+			'time': time
+			}
+
+			# reverse pos if hr
+			if Mod.HardRock in self.mod_combination:
+				args['y'] = 384 - args['y']
+
+			self.play_data += [ReplayEvent(**args)]
+
+		# sort by time
+		self.play_data.sort(key=lambda x: x.time)
+
 
 
 	### NEW
