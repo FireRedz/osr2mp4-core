@@ -10,11 +10,11 @@ from osr2mp4.osrparse.enums import GameMode, Mod
 
 class ReplayEvent(object):
 	def __init__(self, x: int, y: int, keys_pressed: int, time: int, delta_time: int = None):
-		self.delta_time = delta_time
 		self.x = x
 		self.y = y
-		self.keys_pressed = keys_pressed
 		self.time = time
+		self.keys_pressed = keys_pressed
+		self.delta_time = delta_time
 
 	def __getitem__(self, index: int):
 		return {
@@ -119,6 +119,7 @@ class Replay(object):
 				b = n & (~n+1)
 				yield b
 				n ^= b
+
 		bit_values_gen = bits(self.mod_combination)
 		self.mod_combination = frozenset(Mod(mod_val) for mod_val in bit_values_gen)
 
@@ -147,7 +148,7 @@ class Replay(object):
 
 			args = {
 			'delta_time': int(event[0]),
-			'x':float(event[1]),
+			'x': float(event[1]),
 			'y': float(event[2]),
 			'keys_pressed': int(event[3]),
 			'time': time
