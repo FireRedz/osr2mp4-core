@@ -129,18 +129,6 @@ class Replay(object):
 		lzma_raw = lzma.decompress(self.read_byte(lzma_len)).decode('ascii')[:-1]
 		events = [event_raw.split('|') for event_raw in lzma_raw.split(',')]
 
-		"""
-		self.play_data = [
-						ReplayEvent(
-							int(event[0]),
-							float(event[1]),
-							float(event[2]),
-							int(event[3])
-							)
-						for event in events
-						]
-		"""
-		
 		time = 0
 		for event in events:
 			time += int(event[0])
