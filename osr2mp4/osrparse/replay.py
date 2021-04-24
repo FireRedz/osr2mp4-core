@@ -140,8 +140,7 @@ class Replay(object):
 						for event in events
 						]
 		"""
-
-		# yea
+		
 		time = 0
 		for event in events:
 			time += int(event[0])
