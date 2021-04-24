@@ -1,7 +1,7 @@
 import os
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 
 from osr2mp4 import logger
 from osr2mp4.ImageProcess import imageproc
@@ -37,8 +37,19 @@ def prepare_background(backgroundname, settings):
 	interval = int(1000/45)
 	c_interval = max(0, (settings.settings["Background dim"] - 50) * 2.55/interval)
 	color[:] = color[:] - c_interval
+
 	for x in range(interval):
 		color[:] = color[:] + c_interval
 		a = imageproc.add_color(img, color)
 		imgs.append(a)
+
+	delta = min(settings.settings['Background blur'], 10) / len(imgs)
+	for n, img in enumerate(imgs):
+		imgs[n] = imgs[n].filter(
+			ImageFilter.GaussianBlur(
+					settings.settings['Background blur'] - delta*n
+				)
+			)
+
 	return imgs
+
