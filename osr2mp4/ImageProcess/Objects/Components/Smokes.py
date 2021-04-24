@@ -1,5 +1,6 @@
 from PIL import Image
 
+from osr2mp4.ImageProcess import imageproc
 from osr2mp4.ImageProcess.PrepareFrames.YImage import YImage
 from osr2mp4.ImageProcess.Animation.alpha import fade
 
@@ -22,6 +23,7 @@ class Smoke:
 			self.states[replay_info[3]] = (cx, cy)
 
 
+		before = None
 		for time, pos in self.states.items():
 			if time > replay_info[3]-9000: # not sure what the actual duration is, should be around ~8-10s
 				
@@ -37,5 +39,8 @@ class Smoke:
 				y = int((pos[1] - smoke_size[1]/2))
 
 
-				background.paste(frame, (x, y), mask=frame)
+				imageproc.add(frame, background, x, y, topleft=True)
+
+				before = pos
+			
 		
