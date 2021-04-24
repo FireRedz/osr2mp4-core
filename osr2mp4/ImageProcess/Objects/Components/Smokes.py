@@ -12,23 +12,23 @@ class Smoke:
 		self.states = {}
 
 	def add_to_frame(self, background: Image.Image, replay_info: object):
-		cx, cy = replay_info[0], replay_info[1]
-		key = replay_info[2]
+		cx, cy = replay_info.x, replay_info.y
+		key = replay_info.keys_pressed
 
 		cx = int(cx * self.settings.playfieldscale) + self.settings.moveright
 		cy = int(cy * self.settings.playfieldscale) + self.settings.movedown
 
 		##  if key is touching the meme smoke button
 		if key & 16:
-			self.states[replay_info[3]] = (cx, cy)
+			self.states[replay_info.time] = (cx, cy)
 
 
 		before = None
 		for time, pos in self.states.items():
-			if time > replay_info[3]-9000: # not sure what the actual duration is, should be around ~8-10s
+			if time > replay_info.time - 9000: # not sure what the actual duration is, should be around ~8-10s
 				
-				if (replay_info[3]-time) >= 8000:
-					far_into = int((((replay_info[3]-time) % 8000)/1000)*len(self.frames)-1) # peak programming
+				if (replay_info.time - time) >= 8000:
+					far_into = int((((replay_info.time - time) % 8000)/1000)*len(self.frames)-1) # peak programming
 					frame = self.frames[far_into]
 				else:
 					frame = self.frames[0]
