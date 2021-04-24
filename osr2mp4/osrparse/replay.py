@@ -1,16 +1,34 @@
 import _lzma
+import lzma, datetime
+from copy import deepcopy
 
 from osr2mp4.Exceptions import NoDataReplay
 from osr2mp4.osrparse.enums import GameMode, Mod
-import lzma, struct, datetime
+
+
 
 
 class ReplayEvent(object):
-	def __init__(self, time_since_previous_action, x, y, keys_pressed):
-		self.time_since_previous_action = time_since_previous_action
+	def __init__(self, x: int, y: int, keys_pressed: int, time: int, delta_time: int = None):
+		self.delta_time = delta_time
 		self.x = x
 		self.y = y
 		self.keys_pressed = keys_pressed
+		self.time = time
+
+	def __getitem__(self, index: int):
+		return {
+			0: self.x,
+			1: self.y,
+			2: self.keys_pressed,
+			3: self.time
+		}[index]
+
+	def copy(self):
+		return deepcopy(self)
+
+
+
 
 
 class Replay(object):
