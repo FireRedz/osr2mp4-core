@@ -1,7 +1,8 @@
 from PIL import Image
 
-from osr2mp4.ImageProcess.Animation.alpha import fadein
-from osr2mp4.ImageProcess.Animation.size import grow
+from osr2mp4.ImageProcess.Animation.alpha import fadein, fade
+from osr2mp4.ImageProcess.Animation.size import grow, resize
+from osr2mp4.ImageProcess.Animation import easings
 from osr2mp4.ImageProcess import imageproc
 from osr2mp4.ImageProcess.PrepareFrames.YImage import YImage, YImages
 
@@ -27,7 +28,7 @@ def ballinhole(follow, sliderball):
 	return follow
 
 
-def load(scale, settings):
+def load(scale: float, settings: 'Settings'):
 	arrow_frames = []
 	for x in range(120, 100, -4):
 		img = YImage(reversearrow, settings, scale * x / 100, rotate=1)
@@ -39,7 +40,7 @@ def load(scale, settings):
 	return arrow_frames, sliderb_frames, sliderfollow_frames, slider_tick
 
 
-def prepare_slider(diff, scale, settings):
+def prepare_slider(diff: dict, scale: float, settings: 'Settings'):
 
 	cs = (54.4 - 4.48 * diff["CircleSize"]) * scale
 	radius_scale = cs * 2 / default_size
