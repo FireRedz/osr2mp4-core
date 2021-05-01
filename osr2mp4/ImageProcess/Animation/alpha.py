@@ -24,7 +24,7 @@ def list_fade(img: [Image], start: float, end: float, step: float):
 	return outputs
 
 
-def fadeout(img, start, end, step):
+def fadeout(img: Image, start: float, end: float, step: float):
 	"""
 	:param img: PIL.Image or list of PIL.Image
 	:param start: size coef
@@ -32,15 +32,15 @@ def fadeout(img, start, end, step):
 	:param step: size coef
 	:return: list of PIL.Image
 	"""
-	if type(img).__name__ == 'list':
+	if isinstance(img, list):
 		return list_fade(img, start, end, -step)
 	else:
 		return img_fade(img, start, end, -step)
 
 
-def fadein(img, start, end, step):
+def fadein(img: Image, start: float, end: float, step: float):
 
-	if type(img).__name__ == 'list':
+	if isinstance(img, list):
 		return list_fade(img, start, end, step)
 	else:
 		return img_fade(img, start, end, step)

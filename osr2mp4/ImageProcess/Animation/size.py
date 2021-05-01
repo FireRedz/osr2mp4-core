@@ -4,27 +4,29 @@ from PIL import Image
 from osr2mp4.ImageProcess import imageproc
 from osr2mp4.ImageProcess.Animation import easings
 
-def img_resize(img, start, end, step):
+def img_resize(img: Image, start: float, end: float, step: float):
 	outputs = []
 	if not step:
 		step = 1
+
 	for x in np.arange(start, end, step):
 		im = imageproc.change_size(img, x, x)
 		outputs.append(im)
 	return outputs
 
 
-def list_resize(img, start, end, step):
+def list_resize(img: Image, start: float, end: float, step: float):
 	outputs = []
-	x = start
+
 	for i in img:
 		im = imageproc.change_size(i, x, x)
 		outputs.append(im)
-		x += step
+		start += step
+		
 	return outputs
 
 
-def shrink(img, start, end, step):
+def shrink(img: Image, start: float, end: float, step: float):
 	"""
 	:param img: PIL.Image or list of PIL.Image
 	:param start: size coef
@@ -33,15 +35,15 @@ def shrink(img, start, end, step):
 	:return: list of PIL.Image
 	"""
 
-	if type(img).__name__ == 'list':
+	if isinstance(img, list):
 		return list_resize(img, start, end, -step)
 	else:
 		return img_resize(img, start, end, -step)
 
 
-def grow(img, start, end, step):
+def grow(img: Image, start: float, end: float, step: float):
 
-	if type(img).__name__ == 'list':
+	if isinstance(img, list):
 		return list_resize(img, start, end, step)
 	else:
 		return img_resize(img, start, end, step)
