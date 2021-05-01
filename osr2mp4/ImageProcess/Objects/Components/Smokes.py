@@ -1,3 +1,9 @@
+"""
+
+	Certified bruh moment code, yuitora pls help, i cant math man.
+
+"""
+
 from PIL import Image
 
 from osr2mp4.ImageProcess import imageproc
