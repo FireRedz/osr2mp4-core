@@ -54,6 +54,7 @@ def prepare_slider(diff: dict, scale: float, settings: 'Settings'):
 
 	for c in range(1, settings.skin_ini.colours["ComboNumber"] + 1):
 		bframes.append([])
+
 		color = settings.skin_ini.colours["Combo" + str(c)]
 		for x in range(len(sliderb_frames)):
 			if settings.skin_ini.general["AllowSliderBallTint"]:
@@ -62,23 +63,14 @@ def prepare_slider(diff: dict, scale: float, settings: 'Settings'):
 				color_sb = sliderb_frames[x].copy()
 			bframes[-1].append(color_sb)
 
-	startsize, endsize = 0.7, 1
-	scale_interval = (endsize - startsize) * interval/follow_fadein
 
-	startalpha, endalpha = 0.4, 1
-	alpha_interval = (endalpha - startalpha) * interval / follow_fadein
-
-	sframes = fadein(sliderfollow_frames[0], startalpha, endalpha, alpha_interval)
-	sframes = grow(sframes, startsize, endsize, scale_interval)
+	sframes = resize(sliderfollow_frames[0], 0.5, 1, 180, settings, easings.easeOutQuad)
+	sframes = fade(sframes, 0, 1, 60, settings)
 	sframes = sframes[::-1]
 
-	startsize, endsize = endsize * 0.95, endsize * 0.75
-	scale_interval = (endsize - startsize) * interval/follow_fadein
 
-	startalpha, endalpha = 1, 0
-	alpha_interval = (endalpha - startalpha) * interval / follow_fadein
+	sliderfollow_fadeout = fade(sliderfollow_frames[0], 1, 0, 200, settings, easings.easeInQuad)
+	sliderfollow_fadeout = resize(sliderfollow_fadeout, 1, 0.8, 200, settings, easings.easeOutQuad)
 
-	sliderfollow_fadeout = fadein(sliderfollow_frames[0], startalpha, endalpha, alpha_interval)
-	sliderfollow_fadeout = grow(sliderfollow_fadeout, startsize, endsize, scale_interval)
 
 	return arrow_frames, sframes, sliderfollow_fadeout, slider_tick, bframes
