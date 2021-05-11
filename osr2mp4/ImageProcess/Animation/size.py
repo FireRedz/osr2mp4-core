@@ -18,10 +18,10 @@ def img_resize(img: Image, start: float, end: float, step: float):
 def list_resize(img: Image, start: float, end: float, step: float):
 	outputs = []
 
-	for i in img:
-		im = imageproc.change_size(i, x, x)
-		outputs.append(im)
-		start += step
+	for n, i in enumerate(img):
+		outputs.append(
+			imageproc.change_size(i, start*n, start*n)
+			)
 		
 	return outputs
 
