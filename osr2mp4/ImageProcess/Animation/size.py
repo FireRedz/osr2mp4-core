@@ -6,6 +6,7 @@ from osr2mp4.ImageProcess.Animation import easings
 
 def img_resize(img: Image, start: float, end: float, step: float):
 	outputs = []
+
 	if not step:
 		step = 1
 
@@ -19,9 +20,11 @@ def list_resize(img: Image, start: float, end: float, step: float):
 	outputs = []
 
 	for n, i in enumerate(img):
+		resize_value = start + (step*n)
 		outputs.append(
-			imageproc.change_size(i, start*n, start*n)
+			imageproc.change_size(i, resize_value, resize_value)
 			)
+
 		
 	return outputs
 
