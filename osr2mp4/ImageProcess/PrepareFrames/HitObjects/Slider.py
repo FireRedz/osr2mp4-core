@@ -13,7 +13,7 @@ reversearrow = "reversearrow"
 default_size = 128
 
 
-def ballinhole(follow, sliderball):
+def ballinhole(follow: Image, sliderball: Image):
 
 	if follow.size[0] < sliderball.size[0] or follow.size[1] < sliderball.size[1]:
 		width, height = max(follow.size[0], sliderball.size[0]), max(follow.size[1], sliderball.size[1])
@@ -53,7 +53,7 @@ def prepare_slider(diff: dict, scale: float, settings: 'Settings'):
 	bframes = []
 
 	for c in range(1, settings.skin_ini.colours["ComboNumber"] + 1):
-		bframes.append([])
+		bframes += [[]]
 
 		color = settings.skin_ini.colours["Combo" + str(c)]
 		for x in range(len(sliderb_frames)):
@@ -62,7 +62,6 @@ def prepare_slider(diff: dict, scale: float, settings: 'Settings'):
 			else:
 				color_sb = sliderb_frames[x].copy()
 			bframes[-1].append(color_sb)
-
 
 	sframes = resize(sliderfollow_frames[0], 0.5, 1, 180, settings, easings.easeOutQuad)
 	sframes = fade(sframes, 0, 1, 60, settings)
