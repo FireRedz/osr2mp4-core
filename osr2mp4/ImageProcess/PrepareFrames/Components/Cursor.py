@@ -46,6 +46,7 @@ def prepare_cursortrail(scale, continuous, settings):
 		end = 1.5
 	else:
 		end = 1
+		
 	yimg = YImage(cursortrail, settings, scale)
 	trail_frames = fadein(yimg.img, 0.1, end, 0.1)
 	trail_frames = grow(trail_frames, 0.9, 1, 0.1/9)
