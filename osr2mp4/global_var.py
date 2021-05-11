@@ -8,6 +8,7 @@ defaultsettings = {
 	"In-game interface": True,
 	"Show scoreboard": True,
 	"Background dim": 100,
+	"Background blur": 0,
 	"Rotate sliderball": False,
 	"Always show key overlay": True,
 	"Automatic cursor size": False,
@@ -29,7 +30,8 @@ defaultsettings = {
 	"FFmpeg codec": "libx264",
 	"FFmpeg custom commands": "-preset ultrafast -crf 23",
 	"Audio bitrate": 500,
-	"Slider quality": 2
+	"Slider quality": 2,
+	"Leaderboard avatar": False,
 }
 
 defaultppconfig = {
@@ -44,6 +46,7 @@ defaultppconfig = {
 	"Alpha": 1,
 	"Font": "arial.ttf",
 	"Background": os.path.join(os.path.dirname(__file__), "res/pptemplate.png"),
+	"Center Text": False,
 	"Hitresult x": 50,
 	"Hitresult y": 150,
 	"Hitresult Size": 16,
