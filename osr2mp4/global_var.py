@@ -58,7 +58,7 @@ defaultppconfig = {
 	"Hitresult Alpha": 1,
 	"Hitresult Font": "arial.ttf",
 	"Hitresult Background": os.path.join(os.path.dirname(__file__), "res/hitresulttemplate.png"),
-	"Hitresult Gap": 3
+	"Hitresult Gap": 3,
 }
 
 defaultstrainconfig = {
