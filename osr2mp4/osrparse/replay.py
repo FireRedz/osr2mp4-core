@@ -202,8 +202,6 @@ class Replay(object):
 		return self.read_byte(raw).decode()
 
 
-
-
 	def get(self):
 		d = self.__dict__
 		self_dict = {k: d[k] for k in d if k != 'play_data'}

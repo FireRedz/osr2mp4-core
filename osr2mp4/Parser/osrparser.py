@@ -46,8 +46,10 @@ def setup_replay(osrfile: str, beatmap: osuparser.Beatmap, reverse: bool = False
 	start_time = beatmap.start_time
 
 	start_osr = start_time - 3000
+
 	replay_data = [r for r in replay_data if r.time > start_osr] # we dont need replay events before the
 	replay_data = replay_data[:-1]								# map start_time
+	replay_data.sort(key=lambda x: x.time) # prolly dont need this but just in case
 
 	add_useless_shits(replay_data, beatmap)
 	start_time = replay_data[0].time
