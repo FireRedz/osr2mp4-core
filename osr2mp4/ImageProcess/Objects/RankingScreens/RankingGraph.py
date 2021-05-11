@@ -37,6 +37,8 @@ class RankingGraph(ARankingScreen):
 		# the way i did it is just force resize it to the graph box size
 		# which make the image quality terrible
 		# TODO: make the thing not look terrible
+		# TODO 2: crop the lifebar event with startTime and endTime from replay
+
 		life = self.replay_info.life_bar_graph.split('|')
 		life = [[float(_) for _ in e.split(',')] for e in life if len(e.split(',')) > 1 and e.split(',')[1]] # remove null shit
 		life.sort(key=lambda x: x[1])
