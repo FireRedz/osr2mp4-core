@@ -12,7 +12,12 @@ def prepare_scoreboard(scale, settings):
 	"""
 	img = YImage(scoreboard, settings, scale).img
 	img = img.crop((int(img.size[0] * 2/3), 0, img.size[0], img.size[1]))
-	img = img.resize((int(140 * scale), int(64 * scale)))
+
+	x_size = 140
+	if settings.settings['Leaderboard avatar']:
+		x_size += 70
+
+	img = img.resize((int(x_size * scale), int(64 * scale)))
 	imageproc.changealpha(img, 0.3)
 
 	playerimg = imageproc.add_color(img, [80, 80, 80])

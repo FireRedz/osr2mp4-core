@@ -1,22 +1,24 @@
 import json
 import os
-
-import requests
-from osr2mp4.ImageProcess.Animation.easing import easingoutquad
-from recordclass import recordclass
 import re
+import requests
+
 from osr2mp4 import logger
+from osr2mp4.ImageProcess.Animation.easing import easingoutquad
 from osr2mp4.ImageProcess import imageproc
 from osr2mp4.ImageProcess.Objects.FrameObject import FrameObject
 from osr2mp4.ImageProcess.PrepareFrames.Components.Text import prepare_text
 from osr2mp4.Parser.scoresparser import getscores
+
+from recordclass import recordclass
 from itertools import compress
 from itertools import product
+from PIL import Image
 
 BoardInfo = recordclass("BoardInfo", "score maxcombo intscore intcombo playername x y alpha id")
 
 
-def getsummods(mods):
+def getsummods(mods: str):
 	if mods == "*" or mods == "":
 		return "*"
 	mods = re.findall('..', mods)
@@ -49,7 +51,7 @@ def getsummods(mods):
 # Mod's string should be splitted to required mods and optional mods
 
 
-def mod_to_list(mods):
+def mod_to_list(mods: str):
 	required_mods = ""
 	optional_mods = []
 	i = 0
@@ -67,11 +69,11 @@ def mod_to_list(mods):
 	return required_mods, optional_mods
 
 
-def solve(mod):
+def solve(mod: int):
 	return (list(compress(mod, mask)) for mask in product(*[[0, 1]] * len(mod)))
 
 
-def getmods(mods):
+def getmods(mods: str):
 	if mods == "*":
 		return "*"
 	allmods = []
@@ -110,6 +112,7 @@ class Scoreboard(FrameObject):
 
 		self.nboard = 6
 		self.height = (660 - 313) / self.nboard * settings.scale
+		self.x_offset = [0, 70 * settings.scale][settings.settings['Leaderboard avatar']] # for everything else beside avatar
 		self.beatmaphash = replay_info.beatmap_hash
 		self.playerscore = replay_info.score
 		self.playername = replay_info.player_name
@@ -136,7 +139,48 @@ class Scoreboard(FrameObject):
 
 		self.nameimg[self.playername] = playertext[self.playername]
 
-	def getmapid(self, meta, maphash):
+		## setup avatar
+		self.avatar_img = {}
+		self.setup_avatar()
+
+	def setup_avatar(self):
+		if not self.settings.settings['Leaderboard avatar'] or not self.settings.settings['api key']:
+			self.avatar_img = {}
+			return
+
+		avatar_scale = int(self.height)
+		default_avatar = Image.open(requests.get('https://a.ppy.sh/', stream=True).raw).convert('RGBA')
+		default_avatar = default_avatar.resize((avatar_scale, avatar_scale))
+
+		for player in self.nameimg.keys():
+			# set default avatar; will be replaced if everything goes well
+			self.avatar_img[player] = default_avatar
+
+			# get id then get avatar from a.ppy.sh
+			data = {'k': self.settings.settings['api key'], 'u': player}
+			player_data = requests.get('https://old.ppy.sh/api/get_user', params=data)
+
+			if player_data.status_code != 200:
+				continue
+
+			if not player_data.json():
+				continue
+
+			player_id = player_data.json()[0]['user_id']
+
+			# get avatar
+			raw_avatar = requests.get(f'https://a.ppy.sh/{player_id}', stream=True)
+
+			if raw_avatar.status_code != 200:
+				continue
+
+			avatar = Image.open(raw_avatar.raw).convert('RGBA')
+			avatar = avatar.resize((avatar_scale, avatar_scale))
+
+			self.avatar_img[player] = avatar
+
+
+	def getmapid(self, meta: dict, maphash: str):
 		if "BeatmapID" in meta:
 			return meta["BeatmapID"]
 
@@ -144,19 +188,23 @@ class Scoreboard(FrameObject):
 			return -1
 
 		k = self.settings.settings["api key"]
+
 		if k is None:
 			logger.error("\n\n YOU DID NOT ENTERED THE API KEY. GET THE API HERE https://osu.ppy.sh/p/api/\n\n")
 			return
 
 		data = {'k': k, 'h': maphash}
 		r = requests.post("https://osu.ppy.sh/api/get_beatmaps", data=data)
+
 		try:
 			data = json.loads(r.text)
 		except json.decoder.JSONDecodeError:
 			return
-		if type(data).__name__ == "list":
+
+		if isinstance(data, list):
 			if len(data) == 0:
 				return
+
 			return data[0].get("beatmap_id", -1)
 		return data.get("beatmap_id", -1)
 
@@ -348,10 +396,11 @@ class Scoreboard(FrameObject):
 		if number == "0":
 			return
 		number = number
+
 		imageproc.draw_number(background, number, frames, x_offset, y_offset + self.height * 0.8, alpha, "left", gap=1.15 * self.settings.scale)
 
 	def drawscore(self, background, y_offset, number, alpha):
-		self.drawnumber(background, 5 * self.settings.scale, y_offset, number, self.score, alpha)
+		self.drawnumber(background, 5 * self.settings.scale + self.x_offset, y_offset, number, self.score, alpha)
 
 	def drawcombo(self, background, y_offset, number, alpha):
 		if number == "0":
@@ -362,7 +411,17 @@ class Scoreboard(FrameObject):
 		self.drawnumber(background, x_start, y_offset, number, self.combo, alpha)
 
 	def drawname(self, background, y_offset, text, alpha):
-		imageproc.add(self.nameimg[text], background, 0, y_offset + self.height * 0.15, alpha, topleft=True)
+		imageproc.add(self.nameimg[text], background, self.x_offset, y_offset + self.height * 0.15, alpha, topleft=True)
+
+	def draw_avatar(self, background: Image, y_offset: int, name: str, alpha: int):
+		avatar = self.avatar_img.get(name, None)
+
+		if not avatar:
+			return
+			
+
+		imageproc.add(avatar, background, 0, y_offset, alpha, topleft=True)
+
 
 	def animaterankchange(self, y1, y2):
 		change = y2 - y1
@@ -414,6 +473,7 @@ class Scoreboard(FrameObject):
 					self.drawscore(background, self.scoreboards[x].y, self.scoreboards[x].score, alpha=self.scoreboards[x].alpha)
 					self.drawcombo(background, self.scoreboards[x].y, self.scoreboards[x].maxcombo,alpha=self.scoreboards[x].alpha)
 					self.drawname(background, self.scoreboards[x].y, self.scoreboards[x].playername, alpha=self.scoreboards[x].alpha)
+					self.draw_avatar(background, self.scoreboards[x].y, self.scoreboards[x].playername, alpha=self.scoreboards[x].alpha)
 
 		for i in range(len(self.effectalpha)-1, -1, -1):
 			alpha = max(0, min(1, self.effectalpha[i]))
